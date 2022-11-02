@@ -1,15 +1,28 @@
 import Alert from './alert'
 import Footer from './footer'
 import Meta from './meta'
+import Transition from './transition' 
+import { useRouter } from "next/router" 
+import { CMS_NAME } from '../lib/constants'
+import Link from "next/link";
 
-export default function Layout({ preview, children }) {
+export default function Layout({children }) {
+  const router = useRouter() 
   return (
     <>
-      <Meta />
-      <div className="min-h-screen">
-        <main>{children}</main>
+      <div className="layout">
+        <Meta />
+        <div className="header">
+          <Link href={`/`}>Home</Link>
+          <Link href={`/about`}>About</Link>
+          <Link href={`/contact`}>Contact</Link>
+        </div>
+        <Transition location={router.asPath}>
+          <div className="min-h-screen">
+              {children}
+          </div>
+        </Transition>
       </div>
-      <Footer />
     </>
   )
 }

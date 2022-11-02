@@ -8,32 +8,23 @@ import Content from '../components/content'
 import { getAllPostsForHome } from '../lib/api'
 import { CMS_NAME } from '../lib/constants'
 
-export default function Index({ allPosts: { edges }, preview }) {
+export default function About({ allPosts: { edges }, preview }) {
   const heroPost = edges[0]?.node
-  const morePosts = edges.slice(1)
 
   return (
     <Content preview={preview}>
       <Head>
-        <title>Next.js Blog Example with {CMS_NAME}</title>
+        <title>About</title>
       </Head>
       <Container>
-        <Intro />
-        {heroPost && (
-          <HeroPost
-            title={heroPost.title}
-            coverImage={heroPost.featuredImage}
-            date={heroPost.date}
-            author={heroPost.author}
-            slug={heroPost.slug}
-            excerpt={heroPost.excerpt}
-          />
-        )}
-        {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+        <div className="page_content">
+          About
+        </div>
       </Container>
     </Content>
   )
 }
+
 
 export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
   const allPosts = await getAllPostsForHome(preview)

@@ -1,0 +1,75 @@
+body{
+  background: #ddd;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    background: #ddd;
+  
+    .main {
+    }
+  }
+
+.page_content{
+  padding-top: 100px;
+}  
+
+.fade-wrapper{
+  position: relative;
+}
+
+.fade-wrapper > *{
+  background: #ddd;
+  position: fixed;
+  left:0px;
+  top:0px;
+  width:100%;
+  height:100%;
+  overflow: auto;
+}
+
+.my-fade-enter {
+    opacity: 0;
+    position: fixed;
+    left:0px;
+    top:-100px;
+    width:100%;
+    height:100%;
+}
+.my-fade-enter-active {
+    opacity: 1;
+    transition: all 1200ms;
+    position: fixed;
+    left:0px;
+    top:0px;
+    width:100%;
+    height:100%;
+}
+.my-fade-exit {
+  opacity: 1;
+  position: fixed;
+  left:0px;
+  top:0px;
+  width:100%;
+  height:100%;
+}
+.my-fade-exit-active {
+    opacity: 0;
+    transition: all 1200ms;
+    position: fixed;
+    left:0px;
+    top:100px;
+    width:100%;
+    height:100%;
+}
+
+.header{
+  position: fixed;
+  left:0px;
+  top:0px;
+  width:100%;
+  z-index: 1;
+}
