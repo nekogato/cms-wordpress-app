@@ -1,6 +1,33 @@
-const API_URL = process.env.WORDPRESS_API_URL
+import axios from "axios";
+
+//const API_URL = process.env.WORDPRESS_API_URL
+
+// const fetchAPI2 = async (query = '', { variables }: Record<string, any> = {}) => {
+
+//   const res = await axios.post(
+//     process.env.NEXT_PUBLIC_WORDPRESS_API_URL,
+//     {
+//       query: query,
+//       variables: variables
+//     },
+//     {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': `Bearer ${localStorage.getItem('token')}`
+//       }
+//     }
+//   );
+
+//   if (res.status === 200) {
+//     return res.data.data;
+//   }
+
+// };
+
+
 
 async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
+  const API_URL = "https://www.nekodeveloper.com/dev3/graphql";
   const headers = { 'Content-Type': 'application/json' }
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
@@ -9,8 +36,9 @@ async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
     ] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`
   }
 
+
   // WPGraphQL Plugin must be enabled
-  const res = await fetch(API_URL, {
+  const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL, {
     headers,
     method: 'POST',
     body: JSON.stringify({
@@ -24,6 +52,7 @@ async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
     console.error(json.errors)
     throw new Error('Failed to fetch API')
   }
+  
   return json.data
 }
 
@@ -100,6 +129,49 @@ export async function getAllPostsForHome(preview) {
 
   return data?.posts
 }
+
+
+// export async function getAllPostsForHome2(preview) {
+//   const data = await fetchAPI2(
+//     `
+//     query AllPosts {
+//       posts(first: 20, where: { orderby: { field: DATE, order: DESC } }) {
+//         edges {
+//           node {
+//             title
+//             excerpt
+//             slug
+//             date
+//             featuredImage {
+//               node {
+//                 sourceUrl
+//               }
+//             }
+//             author {
+//               node {
+//                 name
+//                 firstName
+//                 lastName
+//                 avatar {
+//                   url
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   `,
+//     {
+//       variables: {
+//         onlyEnabled: !preview,
+//         preview,
+//       },
+//     }
+//   )
+
+//   return data?.posts
+// }
 
 export async function getPostAndMorePosts(slug, preview, previewData) {
   const postPreview = preview && previewData?.post

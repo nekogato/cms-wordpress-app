@@ -1,5 +1,5 @@
 
-import { useState, useContext } from "react";
+import { useState, useContext,useEffect } from "react";
 import { AppContext } from "../components/store/context";
 
 import Head from 'next/head'
@@ -9,13 +9,22 @@ import MoreStories from '../components/more-stories'
 import HeroPost from '../components/hero-post'
 import Intro from '../components/intro'
 import Content from '../components/content'
-import { getAllPostsForHome } from '../lib/api'
+import { getAllPostsForHome} from '../lib/api'
 import { CMS_NAME } from '../lib/constants'
 import { useForm } from "react-hook-form";
 
-export default function Contact({ allPosts: { edges }, preview }) {
-  const heroPost = edges[0]?.node;
-  const { formSubmit } = useContext(AppContext);
+export const refreshPosts = async ({ preview }) => {
+  const allPosts = await getAllPostsForHome(preview)
+
+  return allPosts.edges;
+}
+
+export default function Create({ allPosts: { edges }, preview }) {
+  const [morePosts, setMorePosts] = useState([]);
+  useEffect(() => {
+    setMorePosts(edges);
+  }, []);
+  const { createFormSubmit } = useContext(AppContext);
 
   const {
     register,
@@ -24,14 +33,14 @@ export default function Contact({ allPosts: { edges }, preview }) {
     formState: { errors },
   } = useForm();
 
-  const [previewForm, setPreviewForm] = useState(null);
   const [isSubmit, setIsSubmit] = useState(false);
 
   const onSubmit = async (data) => {
-    const resp = await formSubmit(data);
+    const resp = await createFormSubmit(data);
 
     if (resp) {
       setIsSubmit(true);
+      setMorePosts(await refreshPosts(preview));
     } else {
     }
   };
@@ -40,37 +49,23 @@ export default function Contact({ allPosts: { edges }, preview }) {
   return (
     <Content preview={preview}>
       <Head>
-        <title>Contact</title>
+        <title>Create</title>
       </Head>
       <Container>
         <div className="page_content">
-            Contact
+        Create
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="form_item form_item_text_wrapper">
-                <label htmlFor="">姓名：</label>
+                <label htmlFor="">title：</label>
                 <input
                   type="text"
-                  {...register("your_name", { required: true })}
-                />
-              </div>
-              <div className="form_item form_item_text_wrapper">
-                <label htmlFor="">電郵地址：</label>
-                <input
-                  type="email"
-                  {...register("your_email", { required: true })}
-                />
-              </div>
-              <div className="form_item form_item_text_wrapper">
-                <label htmlFor="">主題：</label>
-                <input
-                  type="text"
-                  {...register("your_subject", { required: true })}
+                  {...register("title", { required: true })}
                 />
               </div>
               <div className="form_item form_item_message_wrapper">
-                <label htmlFor="">信息：</label>
+                <label htmlFor="">content</label>
                 <textarea
-                  {...register("your_message", { required: true })}
+                  {...register("content", { required: true })}
                 ></textarea>
               </div>
               <div className="form_item form_item_text_wrapper">
@@ -80,10 +75,11 @@ export default function Contact({ allPosts: { edges }, preview }) {
             {
               isSubmit&&
               <>
-                <div>submitted.</div>
+                <div>created.</div>
               </>
             }
         </div>
+        {morePosts.length > 0 && <MoreStories posts={morePosts} />}
       </Container>
     </Content>
   )

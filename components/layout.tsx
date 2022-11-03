@@ -13,9 +13,10 @@ export default function Layout({children }) {
       <div className="layout">
         <Meta />
         <div className="header">
-          <Link href={`/`}>Home</Link>
-          <Link href={`/about`}>About</Link>
-          <Link href={`/contact`}>Contact</Link>
+          <Link href={`/`}>Home</Link> / 
+          <Link href={`/about`}>About</Link> / 
+          <Link href={`/contact`}>Contact</Link> / 
+          <Link href={`/create`}>Create</Link>
         </div>
         <Transition location={router.asPath}>
           <div className="min-h-screen">
